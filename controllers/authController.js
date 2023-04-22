@@ -1,5 +1,9 @@
 const { hashPassword, comparePassword } = require("../helpers/authHelper");
 const userModel = require("../models/userModules");
+const jwt = require("jsonwebtoken");
+const { route, post } = require("../routes/authRoute");
+const { model } = require("mongoose");
+const { send } = require("process");
 
 const registerController = async (req, res) => {
   try {
@@ -66,4 +70,58 @@ const registerController = async (req, res) => {
   }
 };
 
-module.exports = registerController;
+// Login Route
+const loginController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(404).send({
+        success: false,
+        message: "Invalid Email and Password",
+      });
+    }
+    //   check user
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Email Not Register",
+      });
+    }
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return res.status(200).send({
+        success: false,
+        message: "Invlid Password",
+      });
+    }
+
+    //   create Token
+
+    const Token = await jwt.sign({ _id: user._id }, process.env.jwt_secret, {
+      expiresIn: "7d",
+    });
+    res.status(200).send({
+      success: true,
+      message: "Login SuccesFully",
+      user: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+      },
+      Token,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500),
+      send({
+        susccess: false,
+        message: "Error in login",
+        error,
+      });
+  }
+};
+
+module.exports.registerController = registerController;
+module.exports.loginController = loginController;

@@ -1,10 +1,17 @@
 const express = require("express");
-const registerController = require("../controllers/authController");
+const {
+  registerController,
+  loginController,
+} = require("../controllers/authController");
 
 // create router object
 const route = express.Router();
-
-//for inset data create post api
+// routing
+//Register || Method post
 route.post("/register", registerController);
+
+// Login || method Post
+
+route.post("/login", loginController);
 
 module.exports = route;
