@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const { route, post } = require("../routes/authRoute");
 const { model } = require("mongoose");
 const { send } = require("process");
+const { log } = require("console");
+const requireSignin = require("../middlewares/authMiddleware");
 
 const registerController = async (req, res) => {
   try {
@@ -123,5 +125,10 @@ const loginController = async (req, res) => {
   }
 };
 
+const testController = async (req, res) => {
+  res.send("test is process");
+};
+
 module.exports.registerController = registerController;
 module.exports.loginController = loginController;
+module.exports.testController = testController;
