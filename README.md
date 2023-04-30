@@ -1,2 +1,2 @@
 # jewellery_website
-This website creaded for buy jewellery online.
+This website created for buy jewellery online.
