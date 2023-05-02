@@ -1,12 +1,12 @@
 import React from "react";
 import Layout from "../Components/Layout/Layout";
 
-const Contact = () => {
+const PageNotFound = () => {
   return (
     <Layout>
-      <h1>Contact</h1>
+      <h1>PageNotFound</h1>
     </Layout>
   );
 };
 
-export default Contact;
+export default PageNotFound;
