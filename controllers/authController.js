@@ -12,19 +12,19 @@ const registerController = async (req, res) => {
     const { name, email, password, address, phone } = req.body;
     // validation
     if (!name) {
-      return res.send({ error: "name is required" });
+      return res.send({ message: "name is required" });
     }
     if (!email) {
-      return res.send({ error: "emails is required" });
+      return res.send({ message: "emails is required" });
     }
     if (!password) {
-      return res.send({ error: "password is required" });
+      return res.send({ message: "password is required" });
     }
     if (!address) {
-      return res.send({ error: "address is required" });
+      return res.send({ message: "address is required" });
     }
     if (!phone) {
-      return res.send({ error: "phone munber is required" });
+      return res.send({ message: "phone munber is required" });
     }
 
     //   check user is availabe or not
@@ -32,7 +32,7 @@ const registerController = async (req, res) => {
     //   check existing user
     if (existingUser) {
       return res.status(200).send({
-        success: true,
+        success: false,
         message: "user already register",
       });
     }
@@ -100,28 +100,29 @@ const loginController = async (req, res) => {
 
     //   create Token
 
-    const Token = await jwt.sign({ _id: user._id }, process.env.jwt_secret, {
+    const token = await jwt.sign({ _id: user._id }, process.env.jwt_SECRET, {
       expiresIn: "7d",
     });
     res.status(200).send({
       success: true,
-      message: "Login SuccesFully",
+      message: "login successfully",
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
         address: user.address,
+        role: user.role,
       },
-      Token,
+      token,
     });
   } catch (error) {
     console.log(error);
-    res.status(500),
-      send({
-        susccess: false,
-        message: "Error in login",
-        error,
-      });
+    res.status(500).send({
+      susccess: false,
+      message: "Error in login",
+      error,
+    });
   }
 };
 

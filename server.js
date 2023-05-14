@@ -3,6 +3,9 @@ const dotenv = require("dotenv");
 const dbconnect = require("./config/dbconnection");
 const app = express();
 const route = require("./routes/authRoute");
+const cors = require("cors");
+
+app.use(cors());
 // this package is use for show the th api
 const morgan = require("morgan");
 
