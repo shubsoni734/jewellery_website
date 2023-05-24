@@ -3,9 +3,11 @@ const {
   registerController,
   loginController,
   testController,
+  forgotPasswordController,
+  userAuth,
 } = require("../controllers/authController");
 const { request } = require("http");
-const { requireSignin, isAdmin } = require("../middlewares/authMiddleware");
+const { requireSignIn, isAdmin } = require("../middlewares/authMiddleware");
 // create router object
 const route = express.Router();
 // routing
@@ -16,6 +18,14 @@ route.post("/register", registerController);
 
 route.post("/login", loginController);
 
-route.get("/test", requireSignin, isAdmin, testController);
+route.post("/forgot-password", forgotPasswordController);
+
+route.get("/test", requireSignIn, isAdmin, testController);
+
+// protected route auth
+
+route.get("/user-auth", requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
+});
 
 module.exports = route;

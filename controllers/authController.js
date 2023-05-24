@@ -6,10 +6,11 @@ const { model } = require("mongoose");
 const { send } = require("process");
 const { log } = require("console");
 const requireSignin = require("../middlewares/authMiddleware");
+const { checkPrime } = require("crypto");
 
 const registerController = async (req, res) => {
   try {
-    const { name, email, password, address, phone } = req.body;
+    const { name, email, password, address, phone, answer } = req.body;
     // validation
     if (!name) {
       return res.send({ message: "name is required" });
@@ -25,6 +26,9 @@ const registerController = async (req, res) => {
     }
     if (!phone) {
       return res.send({ message: "phone munber is required" });
+    }
+    if (!answer) {
+      return res.send({ message: "answer is required" });
     }
 
     //   check user is availabe or not
@@ -47,6 +51,7 @@ const registerController = async (req, res) => {
       password: hashedPassword,
       phone,
       address,
+      answer,
     }).save();
     // user.name = name;
     // user.email = email;
@@ -112,6 +117,7 @@ const loginController = async (req, res) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
+        answer: user.answer,
         role: user.role,
       },
       token,
@@ -126,6 +132,43 @@ const loginController = async (req, res) => {
   }
 };
 
+const forgotPasswordController = async (req, res) => {
+  try {
+    const { email, answer, newPassword } = req.body;
+    if (!email) {
+      res.status(400).send({ message: "Email is required" });
+    }
+    if (!answer) {
+      res.status(400).send({ message: "answer is required" });
+    }
+    if (!newPassword) {
+      res.status(400).send({ message: "New Password is required" });
+    }
+    //check
+    const user = await userModel.findOne({ email, answer });
+    //validation
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "Wrong Email Or Answer",
+      });
+    }
+    const hashed = await hashPassword(newPassword);
+    await userModel.findByIdAndUpdate(user._id, { password: hashed });
+    res.status(200).send({
+      success: true,
+      message: "Password Reset Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Something want Wrong",
+      error,
+    });
+  }
+};
+
 const testController = async (req, res) => {
   res.send("test is process");
 };
@@ -133,3 +176,4 @@ const testController = async (req, res) => {
 module.exports.registerController = registerController;
 module.exports.loginController = loginController;
 module.exports.testController = testController;
+module.exports.forgotPasswordController = forgotPasswordController;

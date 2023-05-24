@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../../Components/Layout/Layout";
 import "../../Styles/Auth/AuthStyle.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Register = ({ sf }) => {
@@ -12,17 +12,18 @@ const Register = ({ sf }) => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [message, setMessage] = useState("");
+  const [answer, setAnswer] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       if (
-        name == "" ||
-        email == "" ||
-        password == "" ||
-        phone == "" ||
-        address == ""
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        phone === "" ||
+        address === "" ||
+        answer === ""
       ) {
         toast.error("every fild is require");
       }
@@ -33,14 +34,15 @@ const Register = ({ sf }) => {
           password,
           phone,
           address,
+          answer,
         })
         .then((res) => {
-          if (res.data.message == "User register Succesfully") {
+          if (res.data.message === "User register Succesfully") {
             // toast.success("Register Sucessfuly");
             console.log("data insert success");
             toast.success("User Register Sucessfully");
             history("/login");
-          } else if (res.data.message == "user already register") {
+          } else if (res.data.message === "user already register") {
             console.log("user alredy register");
             toast.error("You Already Register!");
             setName("");
@@ -48,7 +50,8 @@ const Register = ({ sf }) => {
             setPassword("");
             setPhone("");
             setAddress("");
-          } else if (res.data.message == "error in login") {
+            setAnswer("");
+          } else if (res.data.message === "error in login") {
             toast.error("Server Problem !");
           }
         });
@@ -135,9 +138,18 @@ const Register = ({ sf }) => {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="exampleInputMessage" className="form-label">
-                {message}
-              </label>
+              {/* <label htmlFor="exampleInputAddress" className="form-label">
+                Address
+              </label> */}
+              <input
+                type="text"
+                className="form-control"
+                id="exampleInputAddress"
+                placeholder="Security Answer"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                required
+              />
             </div>
             <button onClick={handleSubmit} className="btn btn-primary">
               Submit

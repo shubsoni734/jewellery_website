@@ -3,26 +3,28 @@ import Layout from "../../Components/Layout/Layout";
 import "../../Styles/Auth/AuthStyle.css";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/Auth";
 
 const Login = () => {
   const [auth, setAuth] = useAuth();
   const history = useNavigate();
-  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
+      if (email === "" || password === "") {
+        toast.error("every fild is require");
+      }
       axios
         .post("http://127.0.0.1:8080/api/v1/auth/login", {
           email,
           password,
         })
         .then((res) => {
-          if (res.data.success == true) {
+          if (res.data.success === true) {
             setAuth({ ...auth, user: res.data.user, token: res.data.token });
             localStorage.setItem("auth", JSON.stringify(res.data));
             toast.success("Login SuccessFully");
@@ -69,11 +71,11 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="mb-3">
+            {/* <div className="mb-3">
               <label htmlFor="exampleInputMessage" className="form-label">
                 {message}
               </label>
-            </div>
+            </div> */}
             <button onClick={handleSubmit} className="btn btn-primary ">
               Submit
             </button>
