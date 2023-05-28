@@ -39,9 +39,9 @@ const Login = () => {
   };
   return (
     <div>
-      <Layout>
+      <Layout title={"Shreeji - Login"}>
         <div className="form-container" style={{ minHeight: "78vh" }}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <h1>Login</h1>
             <div className="mb-3">
               {/* <label htmlFor="exampleInputEmail" className="form-label">
@@ -76,8 +76,16 @@ const Login = () => {
                 {message}
               </label>
             </div> */}
-            <button onClick={handleSubmit} className="btn btn-primary ">
-              Submit
+            <div className="mb-3">
+              <button
+                onClick={() => history("/forgotpassword")}
+                className="btn btn-primary "
+              >
+                Forgot Password
+              </button>
+            </div>
+            <button type="submit" className="btn btn-primary ">
+              Login
             </button>
           </form>
         </div>

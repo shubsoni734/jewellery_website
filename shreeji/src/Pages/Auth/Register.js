@@ -4,7 +4,6 @@ import "../../Styles/Auth/AuthStyle.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
 const Register = ({ sf }) => {
   const history = useNavigate();
   const [name, setName] = useState("");
@@ -13,7 +12,7 @@ const Register = ({ sf }) => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [answer, setAnswer] = useState("");
-
+  // let regex = new RegExp(/^[+]{1}(?:[0-9\-\(\)\/\.]\s?){6, 15}[0-9]{1}$/);
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
@@ -27,6 +26,9 @@ const Register = ({ sf }) => {
       ) {
         toast.error("every fild is require");
       }
+      // if (!regex.test(phone) == true) {
+      //   toast.error("enter correact phone number");
+      // }
       axios
         .post("http://127.0.0.1:8080/api/v1/auth/register", {
           name,
@@ -109,7 +111,7 @@ const Register = ({ sf }) => {
                 required
               />
             </div>
-            <div className="mb-3 inputNumber">
+            <div className="mb-3 inputNumber" style={{}}>
               {/* <label htmlFor="exampleInputNumber" className="form-label">
                 Phone
               </label> */}

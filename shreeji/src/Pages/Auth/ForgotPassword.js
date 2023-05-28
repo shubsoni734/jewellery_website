@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Layout from "../../Components/Layout/Layout";
 import axios from "axios";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const ForgotPassword = () => {
   const history = useNavigate();
   const [email, setEmail] = useState();
@@ -13,8 +13,8 @@ const ForgotPassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
-      if (email === "" || answer === "" || newPassword === "") {
-        toast.error("every field is require");
+      if (email == "" || answer == "" || newPassword == "") {
+        toast.error("every fild is require");
       } else
         axios
           .post("http://127.0.0.1:8080/api/v1/auth/forgot-password", {
@@ -37,7 +37,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <Layout>
+      <Layout title={"Forgot password - Shree"}>
         <div className="form-container" style={{ minHeight: "78vh" }}>
           <form>
             <h1 style={{ fontSize: "30px" }}>Forgot Password</h1>
