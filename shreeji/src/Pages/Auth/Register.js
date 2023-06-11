@@ -66,7 +66,7 @@ const Register = ({ sf }) => {
     <div>
       <Layout>
         <div className="form-container" style={{ minHeight: "78vh" }}>
-          <form>
+          <form onSubmit={handleSubmit}>
             <h1 className="title">Register</h1>
             <div className="mb-3">
               {/* <label htmlFor="exampleInputName" className="form-label">
@@ -147,13 +147,13 @@ const Register = ({ sf }) => {
                 type="text"
                 className="form-control"
                 id="exampleInputAddress"
-                placeholder="Security Answer"
+                placeholder="What is Your Favorite Sports"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 required
               />
             </div>
-            <button onClick={handleSubmit} className="btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </form>
