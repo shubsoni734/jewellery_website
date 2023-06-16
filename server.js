@@ -4,6 +4,7 @@ const dbconnect = require("./config/dbconnection");
 const app = express();
 const route = require("./routes/authRoute");
 const cors = require("cors");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 app.use(cors());
 // this package is use for show the th api
@@ -19,6 +20,8 @@ app.use(morgan("dev"));
 dotenv.config();
 
 app.use("/api/v1/auth", route);
+
+app.use("/api/v1/category", categoryRoutes);
 
 // calling the databae collection
 dbconnect();
