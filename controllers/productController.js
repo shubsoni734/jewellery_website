@@ -40,9 +40,34 @@ const createProdductController = async (req, res) => {
     res.status(500).send({
       success: false,
       error,
-      message: "Error in crearing product",
+      message: "Error in creating product",
+    });
+  }
+};
+
+//get get product controller
+const getProductsController = async (req, res) => {
+  try {
+    const products = await productModel
+      .find({})
+      .populate("category")
+      .select("-photo")
+      .limit(12)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      countTotal: products.length,
+      message: "ALl Products",
+      products,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error in Geting Product",
+      error: error.message,
     });
   }
 };
 
 module.exports.createProdductController = createProdductController;
+module.exports.getProductsController = getProductsController;
