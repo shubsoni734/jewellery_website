@@ -112,3 +112,9 @@ nav ul ul li:hover{
 }
 
 /* Register page  */
+
+
+.product-link{
+  text-decoration: none !important ;
+  color: Black;
+}

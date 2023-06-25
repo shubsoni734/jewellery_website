@@ -175,9 +175,25 @@ const updateProductController = async (req, res) => {
   }
 };
 
+//filter product controllers
+const filterProductController = async (req, res) => {
+  try {
+    res.status(200).send({
+      success: true,
+      message: "Product Filtering SuccessFully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error while filtering Products",
+      error,
+    });
+  }
+};
 module.exports.createProdductController = createProdductController;
 module.exports.getProductsController = getProductsController;
 module.exports.getSingleProductController = getSingleProductController;
 module.exports.getPhotoController = getPhotoController;
 module.exports.deleteProductController = deleteProductController;
 module.exports.updateProductController = updateProductController;
+module.exports.filterProductController = filterProductController;
