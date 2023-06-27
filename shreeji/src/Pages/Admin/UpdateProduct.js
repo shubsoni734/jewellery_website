@@ -4,7 +4,6 @@ import AdminMenu from "../../Components/Layout/AdminMenu";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Modal, Select } from "antd";
-import { compressImage } from "../../CommonFunction/ImageComprass";
 import { useNavigate, useParams } from "react-router-dom";
 
 const { Option } = Select;

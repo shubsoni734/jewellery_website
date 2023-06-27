@@ -190,6 +190,27 @@ const filterProductController = async (req, res) => {
     });
   }
 };
+
+const productCountController = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something went wrong",
+      error,
+    });
+  }
+};
+
+const productListController = () => {
+  
+}
+
 module.exports.createProdductController = createProdductController;
 module.exports.getProductsController = getProductsController;
 module.exports.getSingleProductController = getSingleProductController;
@@ -197,3 +218,5 @@ module.exports.getPhotoController = getPhotoController;
 module.exports.deleteProductController = deleteProductController;
 module.exports.updateProductController = updateProductController;
 module.exports.filterProductController = filterProductController;
+module.exports.productCountController = productCountController;
+module.exports.productListController = productListController;
