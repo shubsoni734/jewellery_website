@@ -21,6 +21,7 @@ const UpdateProduct = () => {
   const [shipping, setShipping] = useState("");
   const [id, setId] = useState("");
   const [photo, setPhoto] = useState("");
+  const [weight, setWeight] = useState("");
 
   const getSingleProduct = async () => {
     try {
@@ -34,6 +35,7 @@ const UpdateProduct = () => {
       setPrice(data.products.price);
       setQuantity(data.products.quantity);
       setShipping(data.products.shipping);
+      setWeight(data.products.weight);
       setCategory(data.products.category._id);
     } catch (error) {
       toast.error("Somethin Went Wrong");
@@ -61,6 +63,7 @@ const UpdateProduct = () => {
       productData.append("description", description);
       productData.append("price", price);
       productData.append("quantity", quantity);
+      productData.append("weight", weight);
       photo && productData.append("photo", photo);
       productData.append("category", category);
       const { data } = await axios.put(
@@ -168,6 +171,15 @@ const UpdateProduct = () => {
                 className="form-control"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="mb-3">
+              <input
+                type="number"
+                value={weight}
+                placeholder="Weight of Item"
+                className="form-control"
+                onChange={(e) => setWeight(e.target.value)}
               />
             </div>
             <div className="mb-3 w-75">

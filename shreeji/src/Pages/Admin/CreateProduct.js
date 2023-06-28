@@ -17,6 +17,7 @@ const CreateProduct = () => {
   const [quantity, setQuantity] = useState("");
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
+  const [weight, setWeight] = useState("");
 
   const getAllCategories = async () => {
     try {
@@ -47,6 +48,7 @@ const CreateProduct = () => {
         !price &&
         !quantity &&
         !category &&
+        !weight &&
         !photo.name
       ) {
         toast.error("every field is require");
@@ -58,6 +60,7 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("weight", weight);
       const { data } = await axios.post(
         "http://127.0.0.1:8080/api/v1/product/create-product",
         productData
@@ -128,6 +131,15 @@ const CreateProduct = () => {
                   placeholder="write a name"
                   className="form-control"
                   onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="number"
+                  value={weight}
+                  placeholder="Weight of Item"
+                  className="form-control"
+                  onChange={(e) => setWeight(e.target.value)}
                 />
               </div>
               <div className="mb-3">

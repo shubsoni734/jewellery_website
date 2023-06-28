@@ -6,15 +6,15 @@ import { Link } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
-    const getProducts = async () => {
-      const { data } = await axios.get(
-        "http://127.0.0.1:8080/api/v1/product/get-product"
-      );
-      setProducts(data.products);
-    };
-    useEffect(() => {
-      getProducts();
-    }, []);
+  const getProducts = async () => {
+    const { data } = await axios.get(
+      "http://127.0.0.1:8080/api/v1/product/get-product"
+    );
+    setProducts(data.products);
+  };
+  useEffect(() => {
+    getProducts();
+  }, []);
   return (
     <Layout>
       <div className="row dashboard">
@@ -40,6 +40,9 @@ const Products = () => {
                   <div className="border border-dark" />
                   <div className="card-body">
                     <h5 className="card-title">{p.name}</h5>
+                    <h6 className="card-text text-decoration-underline">
+                      {p.weight ? `${p.weight} gm.` : ""}
+                    </h6>
                     <p className="card-text">{p.description}</p>
                   </div>
                 </div>

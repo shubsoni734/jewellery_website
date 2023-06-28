@@ -34,6 +34,10 @@ const productSchema = new mongoose.Schema(
     shipping: {
       type: Boolean,
     },
+    weight: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

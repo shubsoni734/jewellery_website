@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
 import { useAuth } from "../Context/Auth";
 import axios from "axios";
+import { Checkbox, Radio } from "antd";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Prices } from "../Components/Prices";
 
 const HomePages = () => {
   const navigate = useNavigate();
-  const [auth, setAuth] = useAuth();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState();
-  // const [page, setPage] = useState(1);
-  // const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState([]);
+  const [radio, setRadio] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const getAllCategories = async () => {
     try {
@@ -41,20 +44,46 @@ const HomePages = () => {
     }
   };
 
-  const getProducts = async () => {
-    const { data } = await axios.get(
-      "http://127.0.0.1:8080/api/v1/product/get-product"
-    );
-    setProducts(data.products);
+  const getAllProducts = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://127.0.0.1:8080/api/v1/product/get-product"
+      );
+      setProducts(data.products);
+    } catch (error) {}
   };
   useEffect(() => {
     getAllCategories();
     getProductCount();
-    getProducts();
-    // if (page === 1) {
-    //   // loadMore();
-    // }
-  }, []);
+    if (!checked.length || !radio.length) getAllProducts();
+  }, [checked.length, radio.length]);
+
+  //filter by category
+  const handleFilter = (value, id) => {
+    let all = [...checked];
+    if (value) {
+      all.push(id);
+    } else {
+      all = all.filter((c) => c !== id);
+    }
+    setChecked(all);
+  };
+
+  const filterProduct = async () => {
+    try {
+      const { data } = await axios.post(
+        "http://127.0.0.1:8080/api/v1/product/product-filters",
+        { checked, radio }
+      );
+      setProducts(data?.product);
+    } catch (error) {
+      toast.error("Something Went Wrong");
+    }
+  };
+
+  useEffect(() => {
+    if (checked.length || radio.length) filterProduct();
+  }, [checked, radio]);
 
   return (
     <Layout title={"Shreeji - Home page"}>
@@ -65,14 +94,92 @@ const HomePages = () => {
         height={"300px"}
         src="/images/banner.jpg"
       />
-      <div className="row">
-        <div className="col-md-3">
-          <h4 className="text-center">Filter By Category</h4>
+      <div className="container-fluid row mt-3">
+        <div className="col-md-2">
+          <h5 className="text-center">Filter By Category</h5>
+          <div className="d-flex flex-column mb-3">
+            {categories.map((c) => (
+              <Checkbox
+                key={c._id}
+                onChange={(e) => handleFilter(e.target.checked, c._id)}
+              >
+                {c.name}
+              </Checkbox>
+            ))}
+          </div>
+
+          <div className="d-flex flex-column">
+            <h5 className="text-center">Filter By Price</h5>
+            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+              {Prices?.map((p) => (
+                <div key={p._id}>
+                  <Radio value={p.array}>{p.name}</Radio>
+                </div>
+              ))}
+            </Radio.Group>
+          </div>
+          <div className="d-flex mt-3 flex-column">
+            <button
+              className="btn btn-danger"
+              onClick={() => window.location.reload()}
+            >
+              RESET FILTERS
+            </button>
+          </div>
         </div>
         <div className="col-md-9">
           <h1 className="text-center"> All Products</h1>
           <div className="d-flex flex-wrap">
-            <h1>Products</h1>
+            {products.map((p) => (
+              <div className="card m-2" style={{ width: "18rem" }}>
+                <img
+                  src={`http://127.0.0.1:8080/api/v1/product/product-photo/${p._id}`}
+                  className="card-img-top"
+                  height={"200px"}
+                  alt={p.name}
+                />
+                <div className="border border-dark" />
+                <div className="card-body">
+                  <div className="card-name-price">
+                    <h5 className="card-title">{p.name}</h5>
+                    <h6 className="card-text text-decoration-underline">
+                      {p.weight ? `${p.weight} gm.` : ""}
+                    </h6>
+                    <h5 className="card-title card-price">
+                      {p.price
+                        .toLocaleString("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                        })
+                        .replace(/(\.00)$/, "")}
+                    </h5>
+                  </div>
+                  <p className="card-text">
+                    {p.description.substring(0, 60)}...
+                  </p>
+                  <button
+                    class="btn btn-primary ms-1"
+                    onClick={() => navigate(`/product/${p.slug}`)}
+                  >
+                    More Detail
+                  </button>
+                  <button class="btn btn-secondary ms-4">Add to 🛒</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="m-2 p-3">
+            {products && products.length < total && (
+              <button
+                className="btn btn-warning"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage(page + 1);
+                }}
+              >
+                {loading ? "loading..." : "Loadmore"}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ const fs = require("fs");
 const { log } = require("console");
 const createProdductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
+    const { name, description, price, category, quantity, shipping, weight } =
       req.fields;
     const { photo } = req.files;
     //alidation
@@ -19,6 +19,8 @@ const createProdductController = async (req, res) => {
         return res.status(500).send({ error: "Category is Required" });
       case !quantity:
         return res.status(500).send({ error: "Quantity is Required" });
+      case !weight:
+        return res.status(500).send({ error: "Weight is Required" });
       case photo && photo.size > 1000000:
         return res
           .status(500)
@@ -132,7 +134,7 @@ const deleteProductController = async (req, res) => {
 //update products
 const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
+    const { name, description, price, category, quantity, shipping, weight } =
       req.fields;
     const { photo } = req.files;
     //validation
@@ -147,6 +149,8 @@ const updateProductController = async (req, res) => {
         return res.status(500).send({ error: "Category is required" });
       case !quantity:
         return res.status(500).send({ error: "Quantity is required" });
+      case !weight:
+        return res.status(500).send({ error: "Weight is Required" });
       case photo && photo.size > 1000000:
         return res.status(500).send({ error: "Image size should be less" });
     }
@@ -176,10 +180,32 @@ const updateProductController = async (req, res) => {
 };
 
 //filter product controllers
-const filterProductController = async (req, res) => {
+// const filterProductController = async (req, res) => {
+//   try {
+//     res.status(200).send({
+//       success: true,
+//       message: "Product Filtering SuccessFully",
+//     });
+//   } catch (error) {
+//     res.status(500).send({
+//       success: false,
+//       message: "Error while filtering Products",
+//       error,
+//     });
+//   }
+// };
+
+// Filters
+const productFiltersController = async (req, res) => {
   try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const product = await productModel.find(args);
     res.status(200).send({
       success: true,
+      product,
       message: "Product Filtering SuccessFully",
     });
   } catch (error) {
@@ -207,9 +233,28 @@ const productCountController = async (req, res) => {
   }
 };
 
-const productListController = () => {
-  
-}
+const productListController = async (req, res) => {
+  try {
+    const perPage = 6;
+    const page = req.params.page ? req.params.page : 1;
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      products,
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Something Went Wrong!",
+      error,
+    });
+  }
+};
 
 module.exports.createProdductController = createProdductController;
 module.exports.getProductsController = getProductsController;
@@ -217,6 +262,7 @@ module.exports.getSingleProductController = getSingleProductController;
 module.exports.getPhotoController = getPhotoController;
 module.exports.deleteProductController = deleteProductController;
 module.exports.updateProductController = updateProductController;
-module.exports.filterProductController = filterProductController;
+// module.exports.filterProductController = filterProductController;
 module.exports.productCountController = productCountController;
 module.exports.productListController = productListController;
+module.exports.productFiltersController = productFiltersController;
