@@ -35,7 +35,7 @@ const CreateProduct = () => {
 
   useEffect(() => {
     getAllCategories();
-  });
+  }, []);
 
   //create product Function
   const handleCreate = async (e) => {
