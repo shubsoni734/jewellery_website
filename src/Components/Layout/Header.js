@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import "../../Styles/NavBarstyle.css";
 import { GiCutDiamond } from "react-icons/gi";
+import { BiSearchAlt } from "react-icons/bi";
 import { useAuth } from "../../Context/Auth";
 import toast from "react-hot-toast";
 import Searchinput from "../Form/Searchinput";
@@ -10,6 +11,7 @@ import Searchinput from "../Form/Searchinput";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
+  const [searchBtn, setSerchBtn] = useState(false);
   // const [modal, setModal] = useState(false);
   // const [modal1, setModal1] = useState(false);
 
@@ -39,7 +41,7 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid ">
           <h3 className="navbar-toggler text-dark no-border text-uppercase fw-bold">
-            <Link to="/" className="navbar-brand design">
+            <Link to="/" className="text-dark">
               <GiCutDiamond />
               Shreeji Jewellers
             </Link>
@@ -61,7 +63,22 @@ const Header = () => {
               Shreeji Jewellers
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <Searchinput />
+              <li className="nav-item">
+                {searchBtn ? (
+                  <div className="mt-1 mx-3">
+                    <Searchinput />
+                  </div>
+                ) : (
+                  <div
+                    className="mt-2 mx-3 d-flex "
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSerchBtn(true)}
+                  >
+                    <BiSearchAlt />
+                    <p className="h6 mx-1"> Search</p>
+                  </div>
+                )}
+              </li>
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home

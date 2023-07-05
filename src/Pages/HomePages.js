@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
-
 import axios from "axios";
+import { Modal, Select } from "antd";
 import { Checkbox, Radio } from "antd";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { Prices } from "../Components/Prices";
 
 const HomePages = () => {
   const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -80,7 +81,7 @@ const HomePages = () => {
     getAllCategories();
     getProductCount();
     if (!checked.length || !radio.length) getAllProducts();
-  },  [checked.length, radio.length]);
+  }, [checked.length, radio.length]);
 
   //filter by category
   const handleFilter = (value, id) => {
@@ -119,43 +120,60 @@ const HomePages = () => {
         src="/images/banner.jpg"
       />
       <div className="container-fluid row mt-3">
-        <div className="col-md-2">
-          <h5 className="text-center">Filter By Category</h5>
-          <div className="d-flex flex-column mb-3">
-            {categories.map((c) => (
-              <Checkbox
-                key={c._id}
-                onChange={(e) => handleFilter(e.target.checked, c._id)}
-              >
-                {c.name}
-              </Checkbox>
-            ))}
-          </div>
-
-          <div className="d-flex flex-column">
-            <h5 className="text-center">Filter By Price</h5>
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-              {Prices?.map((p) => (
-                <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
-                </div>
+        <div className="">
+          <button
+            className="btn btn-dark"
+            onClick={() => {
+              setVisible(true);
+            }}
+          >
+            Product Filter
+          </button>
+          <Modal
+            onCancel={() => setVisible(false)}
+            onOk={() => {
+              setVisible(false);
+            }}
+            visible={visible}
+          >
+            <h5 className="text-center">Filter By Category</h5>
+            <div className="d-flex flex-column mb-3">
+              {categories.map((c) => (
+                <Checkbox
+                  key={c._id}
+                  onChange={(e) => handleFilter(e.target.checked, c._id)}
+                >
+                  {c.name}
+                </Checkbox>
               ))}
-            </Radio.Group>
-          </div>
-          <div className="d-flex mt-3 flex-column">
-            <button
-              className="btn btn-danger"
-              onClick={() => window.location.reload()}
-            >
-              RESET FILTERS
-            </button>
-          </div>
+            </div>
+
+            <div className="d-flex flex-column">
+              <h5 className="text-center">Filter By Price</h5>
+              <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+                {Prices?.map((p) => (
+                  <div key={p._id}>
+                    <Radio value={p.array}>{p.name}</Radio>
+                  </div>
+                ))}
+              </Radio.Group>
+            </div>
+            <div className="d-flex mt-3 flex-column">
+              <button
+                className="btn btn-danger"
+                onClick={() => window.location.reload()}
+              >
+                RESET FILTERS
+              </button>
+            </div>
+          </Modal>
         </div>
-        <div className="col-md-9">
+        {/* <div className="col-md-9"> */}
+        <div>
           <h1 className="text-center"> All Products</h1>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex container-fluid flex-wrap">
             {products.map((p) => (
-              <div className="card m-2" style={{ width: "18rem" }}>
+              <div className="card m-2" style={{ width: "17rem" }}>
                 <img
                   src={`http://127.0.0.1:8080/api/v1/product/product-photo/${p._id}`}
                   className="card-img-top"
