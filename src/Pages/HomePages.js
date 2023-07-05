@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Components/Layout/Layout";
-import { useAuth } from "../Context/Auth";
+
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import toast from "react-hot-toast";
@@ -11,16 +11,16 @@ const HomePages = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [total, setTotal] = useState();
   const [checked, setChecked] = useState([]);
   const [radio, setRadio] = useState([]);
+  const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const getAllCategories = async () => {
     try {
       const { data } = await axios.get(
-        "http://127.0.0.1:8080/api/v1/category/categories"
+        `http://127.0.0.1:8080/api/v1/category/categories`
       );
       if (data?.success) {
         setCategories(data?.category);
@@ -44,19 +44,43 @@ const HomePages = () => {
     }
   };
 
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        `http://127.0.0.1:8080/api/v1/product/product-list/${page}`
+      );
+      setLoading(false);
+      setProducts([...products, ...data?.products]);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (page === 1) return;
+    loadMore();
+  }, [page]);
+
   const getAllProducts = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
-        "http://127.0.0.1:8080/api/v1/product/get-product"
+        `http://127.0.0.1:8080/api/v1/product/product-list/${page}`
       );
+      setLoading(false);
       setProducts(data.products);
-    } catch (error) {}
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
   useEffect(() => {
     getAllCategories();
     getProductCount();
     if (!checked.length || !radio.length) getAllProducts();
-  }, [checked.length, radio.length]);
+  },  [checked.length, radio.length]);
 
   //filter by category
   const handleFilter = (value, id) => {

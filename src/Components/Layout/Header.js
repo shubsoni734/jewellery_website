@@ -4,6 +4,7 @@ import "../../Styles/NavBarstyle.css";
 import { GiCutDiamond } from "react-icons/gi";
 import { useAuth } from "../../Context/Auth";
 import toast from "react-hot-toast";
+import Searchinput from "../Form/Searchinput";
 
 // import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
@@ -38,8 +39,10 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid ">
           <h3 className="navbar-toggler text-dark no-border text-uppercase fw-bold">
-            <GiCutDiamond />
-            Shreeji Jewellers
+            <Link to="/" className="navbar-brand design">
+              <GiCutDiamond />
+              Shreeji Jewellers
+            </Link>
           </h3>
           <button
             className="navbar-toggler "
@@ -58,6 +61,7 @@ const Header = () => {
               Shreeji Jewellers
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <Searchinput />
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home
