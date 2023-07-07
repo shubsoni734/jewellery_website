@@ -117,7 +117,7 @@ const HomePages = () => {
         alt="bannerimage"
         width={"100%"}
         height={"300px"}
-        src="./images/banner.jpg"
+        src="./Images/banner.JPG"
       />
       <div className="container-fluid row mt-3">
         <div className="">
