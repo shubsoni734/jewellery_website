@@ -42,7 +42,10 @@ const Header = () => {
         <div className="container-fluid ">
           <h3 className="navbar-toggler text-dark no-border text-uppercase fw-bold">
             <Link to="/" className="text-dark">
-              <GiCutDiamond />
+              <img
+                src="./favicon.png"
+                style={{ width: "35px", marginRight: "5px" }}
+              />
               Shreeji Jewellers
             </Link>
           </h3>
@@ -59,7 +62,10 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link to="/" className="navbar-brand">
-              <GiCutDiamond />
+              <img
+                src="./favicon.png"
+                style={{ width: "35px", marginRight: "5px" }}
+              />
               Shreeji Jewellers
             </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
