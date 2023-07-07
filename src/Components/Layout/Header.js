@@ -43,7 +43,7 @@ const Header = () => {
           <h3 className="navbar-toggler text-dark no-border text-uppercase fw-bold">
             <Link to="/" className="text-dark">
               <img
-                src="./favicon.png"
+                src="../logo.png"
                 style={{ width: "35px", marginRight: "5px" }}
               />
               Shreeji Jewellers
