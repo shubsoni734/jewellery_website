@@ -37,6 +37,7 @@ const AdminOrders = () => {
 
   const handleChange = async (orderId, value) => {
     try {
+      console.log(orderId, "orderId", value, "vvvvv");
       const { data } = await axios.put(
         `http://127.0.0.1:8080/api/v1/auth/order-status/${orderId}`,
         {
@@ -79,6 +80,7 @@ const AdminOrders = () => {
                           onChange={(value) => handleChange(o._id, value)}
                           defaultValue={o?.status}
                         >
+                          {JSON.stringify(o._id)}
                           {status.map((s, i) => (
                             <Option key={i} value={s}>
                               {s}

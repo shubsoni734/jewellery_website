@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import "../../Styles/NavBarstyle.css";
-import { GiCutDiamond } from "react-icons/gi";
 import { BiSearchAlt } from "react-icons/bi";
 import { useAuth } from "../../Context/Auth";
 import toast from "react-hot-toast";
@@ -9,6 +8,7 @@ import Searchinput from "../Form/Searchinput";
 import useCategory from "../../hooks/useCategory";
 import { useCart } from "../../Context/Cart";
 import { Badge } from "antd";
+import axios from "axios";
 
 // import { Modal, ModalBody, ModalHeader } from "reactstrap";
 
@@ -17,8 +17,55 @@ const Header = () => {
   const [cart, setCart] = useCart();
   const categories = useCategory([]);
   const [searchBtn, setSerchBtn] = useState(false);
-  // const [modal, setModal] = useState(false);
+  const [silverValue, setSilverValue] = useState(null);
+  const [goldValue, setGoldValue] = useState(null);
   // const [modal1, setModal1] = useState(false);
+
+  // var myHeaders = new Headers();
+  // myHeaders.append("x-access-token", "goldapi-hpzrlkjsq0gs-io");
+  // myHeaders.append("Content-Type", "application/json");
+
+  // var requestOptions = {
+  //   method: "GET",
+  //   headers: myHeaders,
+  //   redirect: "follow",
+  // };
+  useEffect(async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8080/api/v1/auth/getRate"
+      );
+      const { silver, gold } = response.data.rate[0];
+      setSilverValue(silver);
+      setGoldValue(gold);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    // const res = await axios.get("http://127.0.0.1:8080/api/v1/auth/getRate");
+    // const data = await res.json();
+
+    // .then(async (res) => {
+    //   console.log(data);
+    // if (data && data[0]) {
+    //   console.log(data[0].silver);
+    //   console.log(data[0].gold);
+    // } else {
+    //   console.log("Data or the first element is undefined.");
+    // }
+    // });
+  }, []);
+
+  // useEffect(async () => {
+  //   const res = await axios.get(
+  //     "https://www.goldapi.io/api/XAU/INR",
+  //     requestOptions
+  //   );
+  //   console.log(res.data);
+  // }, []);
+  // fetch("https://www.goldapi.io/api/XAU/INR", requestOptions)
+  //   .then((response) => response.text())
+  //   .then((result) => console.log(result));
+  // .catch((error) => console.log("error", error));
 
   const handelLogout = () => {
     setAuth({
@@ -28,6 +75,33 @@ const Header = () => {
     });
     localStorage.removeItem("auth");
     toast.success("Logout Successfully");
+  };
+  // useEffect(async () => {
+  //   let res = await axios.get(
+  //     `https://api.metalpriceapi.com/v1/latest?api_key=9c3e528061699dcb080c7cb54c4dd0e5&base=EUR&currencies=USD,XAU,XAG`
+  //   );
+  //   console.log(res.data);
+  // }, []);
+
+  const blinkingStyles = {
+    color: "goldenrod",
+    fontWeight: "bold",
+    animation: "blink 1s infinite",
+    "@keyframes blink": {
+      "0%": { opacity: 1 },
+      "50%": { opacity: 0 },
+      "100%": { opacity: 1 },
+    },
+  };
+  const boldSilverStyles = {
+    fontWeight: "bold",
+    color: "blue",
+    animation: "blink 1s infinite",
+    "@keyframes blink": {
+      "0%": { opacity: 1 },
+      "50%": { opacity: 0 },
+      "100%": { opacity: 1 },
+    },
   };
   return (
     <div>
@@ -43,12 +117,13 @@ const Header = () => {
           </ModalBody>
         </Modal>
       )} */}
+
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid ">
           <h3 className="navbar-toggler text-dark no-border text-uppercase fw-bold">
             <Link to="/" className="text-dark">
               <img
-                src="../logo.png"
+                src="/Images/logo.png"
                 style={{ width: "35px", marginRight: "5px" }}
               />
               Shreeji Jewellers
@@ -72,8 +147,30 @@ const Header = () => {
                 style={{ width: "35px", marginRight: "5px" }}
               />
               Shreeji Jewellers
-            </Link>
+              {/* {rate}
+               */}
+            </Link>{" "}
+            {/* <li className="nav-item ">
+              <p>Gold:{goldValue}</p>
+              <p>silver:{silverValue}</p>
+            </li> */}
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li
+                className="nav-item dropdown nav-link dropdown-toggle"
+                role="button"
+                data-bs-toggle="dropdown"
+              >
+                Live Rate
+                <ul className="dropdown-menu">
+                  <li className="nav-item p-2" style={blinkingStyles}>
+                    Gold:{goldValue}
+                  </li>
+                  <li className="nav-item p-2 " style={boldSilverStyles}>
+                    silver:{silverValue}
+                  </li>
+                </ul>
+              </li>
+
               <li className="nav-item">
                 {searchBtn ? (
                   <div className="mt-1 mx-3">
@@ -121,7 +218,6 @@ const Header = () => {
                   ))}
                 </ul>
               </li>
-
               {/* <li className="nav-item">
                 <NavLink
                   to="/catogery"
@@ -162,6 +258,7 @@ const Header = () => {
                           className="dropdown-item"
                         >
                           Dashboard
+                          {/* {rate.silver} */}
                         </NavLink>
                       </li>
                       <li>
@@ -180,7 +277,7 @@ const Header = () => {
               <li className="nav-item">
                 <Badge count={cart?.length} showZero>
                   <NavLink to="/cart" className="nav-link">
-                    Cart
+                    Cart{}
                   </NavLink>
                 </Badge>
               </li>

@@ -6,10 +6,12 @@ import Layout from "../Components/Layout/Layout";
 import DropIn from "braintree-web-drop-in-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useBill } from "../Context/OrderDetail";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
+  const [bill, setBill] = useBill();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,10 +73,13 @@ const CartPage = () => {
           cart,
         }
       );
+      // console.log(data?.ok, );
       setLoading(false);
-      localStorage.removeItem("cart");
-      setCart([]);
-      navigate("/dashbord/user/orders");
+      setBill(data?.settledTransaction);
+      // localStorage.removeItem("cart");
+      // setCart([]);
+      // navigate("/dashbord/user/orders");
+      navigate("/invoce-detail");
       toast.success("Payment Completed Successfully ");
     } catch (error) {
       console.log(error);
@@ -184,8 +189,7 @@ const CartPage = () => {
                         },
                         googlePay: {
                           buttonStyle: "black",
-                          },
-                        
+                        },
                       }}
                       onInstance={(instance) => setInstance(instance)}
                     />

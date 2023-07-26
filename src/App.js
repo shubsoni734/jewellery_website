@@ -27,6 +27,7 @@ import Categories from "./Pages/Categories";
 import CategoryProduct from "./Pages/CategoryProduct";
 import CartPage from "./Pages/CartPage";
 import AdminOrders from "./Pages/Admin/AdminOrders";
+import OrderBill from "./Pages/OrderBill";
 function App() {
   return (
     <>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/category/:slug" element={<CategoryProduct />} />
         <Route path="/product/:slug" element={<ProductDetiail />} />
+        <Route path="/invoce-detail" element={<OrderBill />} />
         <Route path="/dashbord" element={<PrivateRoute />}>
           <Route path="user" element={<Dashbord />} />
           <Route path="user/profile" element={<Profile />} />

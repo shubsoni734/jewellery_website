@@ -8,15 +8,18 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./Context/Auth";
 import { SearchProvider } from "./Context/Search";
 import { CartProvider } from "./Context/Cart";
+import { BillProvider } from "./Context/OrderDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthProvider>
     <SearchProvider>
       <CartProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <BillProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </BillProvider>
       </CartProvider>
     </SearchProvider>
   </AuthProvider>
