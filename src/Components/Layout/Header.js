@@ -41,19 +41,19 @@ const Header = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-    // const res = await axios.get("http://127.0.0.1:8080/api/v1/auth/getRate");
-    // const data = await res.json();
-
-    // .then(async (res) => {
-    //   console.log(data);
-    // if (data && data[0]) {
-    //   console.log(data[0].silver);
-    //   console.log(data[0].gold);
-    // } else {
-    //   console.log("Data or the first element is undefined.");
-    // }
-    // });
   }, []);
+  // setInterval(async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "http://127.0.0.1:8080/api/v1/auth/getRate"
+  //     );
+  //     const { silver, gold } = response.data.rate[0];
+  //     setSilverValue(silver);
+  //     setGoldValue(gold);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }, 2000);
 
   // useEffect(async () => {
   //   const res = await axios.get(
