@@ -9,7 +9,6 @@ import { AuthProvider } from "./Context/Auth";
 import { SearchProvider } from "./Context/Search";
 import { CartProvider } from "./Context/Cart";
 import { BillProvider } from "./Context/OrderDetail";
-import * as serviceWorker from "./service-worker";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
